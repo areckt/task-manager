@@ -6,7 +6,7 @@ import Image from 'next/image'
 import menu from '@/app/utils/menu'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { useUser, useClerk } from '@clerk/nextjs'
+import { useUser, useClerk, UserButton } from '@clerk/nextjs'
 import Button from '../Button/Button'
 import { arrowLeft, bars, logout } from '@/app/utils/Icons'
 
@@ -33,6 +33,9 @@ const Sidebar = () => {
         <div className="profile-overlay"></div>
         <div className="image">
           <Image width={70} height={70} src={imageUrl} alt="profile" />
+        </div>
+        <div className="user-btn absolute z-20 top-0 w-full h-full">
+          <UserButton />
         </div>
         <h1>
           <span>{firstName}</span>

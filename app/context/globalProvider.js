@@ -20,7 +20,11 @@ export const GlobalProvider = ({ children }) => {
     setIsLoading(true)
     try {
       const res = await axios.get('/api/tasks')
-      setTasks(res.data)
+      if (res.statusText == 'OK') {
+        setTasks(res.data)
+      } else {
+        toast.error("Couldn't load the tasks.")
+      }
       setIsLoading(false)
     } catch (error) {
       console.error(error)
@@ -46,6 +50,10 @@ export const GlobalProvider = ({ children }) => {
     }
   }
 
+  const completedTasks = tasks.filter((t) => t.isCompleted === true)
+  const incompleteTasks = tasks.filter((t) => t.isCompleted === false)
+  const importantTasks = tasks.filter((t) => t.isImportant === true)
+
   useEffect(() => {
     if (user) allTasks()
   }, [user])
@@ -57,6 +65,9 @@ export const GlobalProvider = ({ children }) => {
         tasks,
         deleteTask,
         isLoading,
+        completedTasks,
+        incompleteTasks,
+        importantTasks,
         collapsed,
       }}
     >
