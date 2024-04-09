@@ -11,7 +11,7 @@ export const GlobalUpdateContext = createContext()
 export const GlobalProvider = ({ children }) => {
   const { user } = useUser()
   const [selectedTheme, setSelectedTheme] = useState(0)
-  const [collapsed, setCollapsed] = useState(false)
+  const [collapsed, setCollapsed] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
   const [modal, setModal] = useState(false)
   const [tasks, setTasks] = useState([])
@@ -24,12 +24,23 @@ export const GlobalProvider = ({ children }) => {
     setModal(false)
   }
 
+  const toggleMenu = () => {
+    setCollapsed(!collapsed)
+  }
+
   const allTasks = async () => {
     setIsLoading(true)
     try {
       const res = await axios.get('/api/tasks')
       if (res.statusText == 'OK') {
-        setTasks(res.data)
+        const tasks = res.data
+        tasks.forEach(task => {
+          task.createdAtTimestamp = new Date(task.createdAt).getTime()
+        })
+
+        const sortedTasks = tasks.sort((a, b) => b.createdAtTimestamp - a.createdAtTimestamp)
+        setTasks(sortedTasks)
+
       } else {
         toast.error("Couldn't load the tasks.")
       }
@@ -101,6 +112,7 @@ export const GlobalProvider = ({ children }) => {
         incompleteTasks,
         importantTasks,
         collapsed,
+        toggleMenu,
         modal,
         openModal,
         closeModal,

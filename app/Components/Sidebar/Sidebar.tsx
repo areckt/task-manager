@@ -11,7 +11,7 @@ import Button from '../Button/Button'
 import { arrowLeft, bars, logout } from '@/app/utils/Icons'
 
 const Sidebar = () => {
-  const { theme, collapsed } = useGlobalState()
+  const { theme, collapsed, toggleMenu } = useGlobalState()
   const { signOut } = useClerk()
   const { user } = useUser()
   const { firstName, lastName, imageUrl } = user || {
@@ -29,6 +29,9 @@ const Sidebar = () => {
 
   return (
     <SidebarStyled theme={theme} collapsed={collapsed}>
+      <button className="toggle-nav" onClick={toggleMenu}>
+        {collapsed ? bars : arrowLeft}
+      </button>
       <div className="profile">
         <div className="profile-overlay"></div>
         <div className="image">
